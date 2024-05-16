@@ -1,0 +1,27 @@
+on:
+  pull_request:
+
+  push:
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  with-env:
+    name: test without deployment environment
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - run: npm install jwt-decode
+      - uses: actions/github-script@v7
+        script: |
+          jwt_decode = require('jwt-decode')
+          const id_token = await core.getIDToken()
+          console.log(jwt_decode(id_token)) 
+
